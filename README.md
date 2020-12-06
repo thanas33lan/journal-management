@@ -1,8 +1,8 @@
-# User-Management-PHP-MYSQL
+# Journal-Management-PHP-MYSQL
 
-PHP User Management System is a powerful PHP script that offers a secure user management system. The application is a great way to build your website, allowing your users to register an account and build restricted access to certain users. We offer great support and it’s very easy to install. It’s powered by MYSQL and PHP.
+PHP Journal Management System is a powerful PHP script that offers a secure Journal management system. The application is a great way to build your website, allowing your Journals to register an account and build restricted access to certain Journals. We offer great support and it’s very easy to install. It’s powered by MYSQL and PHP.
 
-# User Features
+# Journal Features
 
 * Login
 * Signup
@@ -14,19 +14,19 @@ PHP User Management System is a powerful PHP script that offers a secure user ma
 
 # Admin Features
 
-* Dashboard (Total Users, Deleted Users, Notification, Feedback Messages)
+* Dashboard (Total Journals, Deleted Journals, Notification, Feedback Messages)
 * Signup
 * Change Password
 * Edit Admin Profile
-* Edit Users Profile
+* Edit Journals Profile
 * Reply Feedback
-* Delete Users
-* Confirmed Users
+* Delete Journals
+* Confirmed Journals
 * View Feedback
 * Notification
-* View Delelted Users
-* Search Users, Feedback Messages
-* Download User Excel File 
+* View Delelted Journals
+* Search Journals, Feedback Messages
+* Download Journal Excel File 
 * Sorting 
 
 ## Wireframe
@@ -47,7 +47,7 @@ PHP User Management System is a powerful PHP script that offers a secure user ma
 
 * Login to Admin
 * Url: http://www.yourdomain.com/admin/
-* Username : admin
+* Journalname : admin
 * Password : 963852741
 
 ### Database Files are included in Project. (database.sql)

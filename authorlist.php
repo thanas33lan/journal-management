@@ -5,9 +5,8 @@ include('includes/config.php');
 if (strlen($_SESSION['alogin']) == 0) {
 	header('location:index.php');
 } else {
-	if (isset($_GET['del']) && isset($_GET['name'])) {
+	if (isset($_GET['del'])) {
 		$id = base64_decode($_GET['del']);
-		$name = $_GET['name'];
 
 		$sql = "UPDATE author_details SET deleted = 'yes' WHERE author_id=:id";
 		$query = $dbh->prepare($sql);

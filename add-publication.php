@@ -27,6 +27,7 @@ if (strlen($_SESSION['alogin']) == 0) {
 		$citation		= $_POST['citation'];
 		$description	= $_POST['description'];
 		$status			= $_POST['status'];
+		$createdBy   	= $_SESSION['id'];
 
 		$user			= $_SESSION['alogin'];
 		$reciver		= 'Admin';
@@ -46,8 +47,8 @@ if (strlen($_SESSION['alogin']) == 0) {
 
 		$sql = "insert into author_details 
 
-	(first_author, co_author, national_type, title, journal_name,  date_published, year_published, issn, volume, page, impact, citation, description, status, attachment ) values 
-	(:firstAuthor, :coAuthor, :nationalType, :title, :journalName, :datePublished, :yearPublished, :issnNo, :volume, :page, :impact, :citation, :description, :status, :attachment)";
+	(first_author, co_author, national_type, title, journal_name,  date_published, year_published, issn, volume, page, impact, citation, description, status, created_by, attachment ) values 
+	(:firstAuthor, :coAuthor, :nationalType, :title, :journalName, :datePublished, :yearPublished, :issnNo, :volume, :page, :impact, :citation, :description, :status, :createdBy,:attachment)";
 
 		$query = $dbh->prepare($sql);
 		// $query-> bindParam(':user', $user, PDO::PARAM_STR);
@@ -67,6 +68,7 @@ if (strlen($_SESSION['alogin']) == 0) {
 		$query->bindParam(':citation', $citation, PDO::PARAM_STR);
 		$query->bindParam(':description', $description, PDO::PARAM_STR);
 		$query->bindParam(':status', $status, PDO::PARAM_STR);
+		$query-> bindParam(':createdBy', $createdBy, PDO::PARAM_STR);
 		$query->bindParam(':attachment', $attachment, PDO::PARAM_STR);
 		$query->execute();
 		$msg = "Feedback Send";

@@ -3,7 +3,7 @@
 define('DB_HOST','localhost');
 define('DB_USER','root');
 define('DB_PASS','zaq12345');
-define('DB_NAME','journal-management');
+define('DB_NAME','journal');
 // Establish database connection.
 try
 {

@@ -107,7 +107,7 @@ if (strlen($_SESSION['alogin']) == 0) {
 					<div class="row">
 						<div class="col-md-12">
 
-							<h2 class="page-title">Manage Author</h2>
+							<h2 class="page-title">Manage Users</h2>
 
 							<!-- Zero Configuration Table -->
 							<div class="panel panel-default">
