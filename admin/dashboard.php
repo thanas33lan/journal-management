@@ -1,5 +1,4 @@
 <?php
-session_start();
 error_reporting(0);
 include('includes/config.php');
 if (strlen($_SESSION['alogin']) == 0) {
@@ -226,7 +225,7 @@ if (strlen($_SESSION['alogin']) == 0) {
 								<th>Email</th>
 								<th>Gender</th>
 								<th>Author</th>
-								<th>Title</th>
+								<th>Research topic</th>
 								<th>Book Name</th>
 								<th>Year</th>
 								<th>Status</th>
@@ -254,11 +253,10 @@ if (strlen($_SESSION['alogin']) == 0) {
 
 										<td>
 											<a href="view-journal-list.php?view=<?php echo $result->author_id; ?>"><i class="fa fa-eye" style="color:grey"></i></a>&nbsp;&nbsp;
-
-											<!-- <a href="edit-user.php?edit=< ?php echo $result->author_id;?>" onclick="return confirm('Do you want to Edit');">&nbsp; <i class="fa fa-pencil"></i></a>&nbsp;&nbsp;
-									<a href="userlist.php?del=< ?php echo $result->author_id;?>&name=< ?php echo htmlentities($result->email);?>" onclick="return confirm('Do you want to Delete');"><i class="fa fa-trash" style="color:red"></i></a>&nbsp;&nbsp; -->
-											<!-- <a href="pdf.php?pdf=< ?php echo $result->author_id;?>" onclick="return confirm('Do you want to print');">&nbsp; <i class="fa-file"></i></a>&nbsp;&nbsp; -->
-
+											<?php if(isset($result->attachment) && $result->attachment != ""){ ?>
+												<a href="/attachment-document/<?php echo $result->attachment;?>" target="_blank"><i class="fa fa-external-link" style="color:grey"></i></a>&nbsp;&nbsp;
+												<a href="/attachment-document/<?php echo $result->attachment;?>" target="_blank" download><i class="fa fa-download" style="color:grey"></i></a>&nbsp;&nbsp;
+											<?php } ?>
 										</td>
 									</tr>
 							<?php $cnt = $cnt + 1;

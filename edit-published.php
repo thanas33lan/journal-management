@@ -1,5 +1,4 @@
 <?php
-session_start();
 error_reporting(0);
 include('includes/config.php');
 if(strlen($_SESSION['alogin'])==0)
@@ -15,7 +14,6 @@ if(isset($_GET['edit']))
 	
 if(isset($_POST['submit']))
   {
-	
 	$file 			= $_FILES['attachment']['name'];
 	$file_loc 		= $_FILES['attachment']['tmp_name'];
 	$folder			= "attachment-document/";
@@ -25,11 +23,11 @@ if(isset($_POST['submit']))
 
 	
 	$firstAuthor	= $_POST['firstAuthor'];
-	$coAuthor		= $_POST['coAuthor'];
-	$nationalType	= $_POST['nationalType'];
+	$coAuthor		= $_POST['coAuthor1'];
+	$journalType	= $_POST['journalType'];
 	$title			= $_POST['title'];
 	$journalName    = $_POST['journalName'];
-	$datePublished	= $_POST['datePublished'];
+	$datePublished	= $_POST['monthPublished'];
 	$yearPublished	= $_POST['yearPublished'];
 	$issnNo			= $_POST['issnNo'];
 	$volume			= $_POST['volume'];
@@ -38,40 +36,43 @@ if(isset($_POST['submit']))
 	$citation		= $_POST['citation'];
 	$description	= $_POST['description'];
 	$status			= $_POST['status'];
+	$createdBy   	= $_SESSION['id'];
 
-	// $attachment			= $_POST['attachment'];
+	$attachment			= $_POST['attachment'];
 
 
 	if(move_uploaded_file($file_loc,$folder.$final_file))
 	{
-		// $attachment=$final_file;
+		$attachment=$final_file;
 
 	}
 
-	$sql="UPDATE author_details SET first_author=(:firstAuthor), co_author=(:coAuthor), national_type=(:nationalType), title=(:title),  journal_name=(:journalName),  date_published=(:datePublished), year_published=(:yearPublished), issn=(:issnNo), volume=(:volume), page=(:page), impact=(:impact), citation=(:citation), description=(:description), status=(:status) WHERE author_id=(:idedit)";
-	// $sql="UPDATE author_details SET first_author=(:firstAuthor), co_author=(:coAuthor), national_type=(:nationalType), title=(:title),  journal_name=(:journalName),  date_published=(:datePublished), year_published=(:yearPublished), issn=(:issnNo), volume=(:volume), page=(:page), impact=(:impact), citation=(:citation), description=(:description), status=(:status),  attachment=(:attachment) WHERE id=(:idedit)";
-	// $sql="UPDATE users SET name=(:name), email=(:email), gender=(:gender), mobile=(:mobileno), designation=(:designation), Image=(:image) WHERE id=(:idedit)";
+	$sql="UPDATE author_details SET first_author=(:firstAuthor), co_author=(:coAuthor), co_author2=(:coAuthor2), co_author3=(:coAuthor3), co_author4=(:coAuthor4), journal_type=(:journalType), title=(:title),  journal_name=(:journalName),  date_published=(:datePublished), year_published=(:yearPublished), issn=(:issnNo), volume=(:volume), page=(:page), impact=(:impact), citation=(:citation), description=(:description), status=(:status), created_by=(:createdBy) WHERE author_id=(:idedit)";
 	$query = $dbh->prepare($sql);
-	//   echo $idedit;die;
-
-	$query-> bindParam(':firstAuthor', $firstAuthor, PDO::PARAM_STR);
-	$query-> bindParam(':coAuthor', $coAuthor, PDO::PARAM_STR);
-	$query-> bindParam(':nationalType', $nationalType, PDO::PARAM_STR);
-	$query-> bindParam(':title', $title, PDO::PARAM_STR);
-	$query-> bindParam(':journalName', $journalName, PDO::PARAM_STR);
-	$query-> bindParam(':datePublished', $datePublished, PDO::PARAM_STR);
-	$query-> bindParam(':yearPublished', $yearPublished, PDO::PARAM_STR);
-	$query-> bindParam(':issnNo', $issnNo, PDO::PARAM_STR);
-	$query-> bindParam(':volume', $volume, PDO::PARAM_STR);
-	$query-> bindParam(':page', $page, PDO::PARAM_STR);
-	$query-> bindParam(':impact', $impact, PDO::PARAM_STR);
-	$query-> bindParam(':citation', $citation, PDO::PARAM_STR);
-	$query-> bindParam(':description', $description, PDO::PARAM_STR);
-	$query-> bindParam(':status', $status, PDO::PARAM_STR);
-	// $query-> bindParam(':attachment', $attachment, PDO::PARAM_STR);
-	$query-> bindParam(':idedit', $idedit, PDO::PARAM_STR);
-	$query->execute();
-	$msg="Information Updated Successfully";
+	$query->bindParam(':firstAuthor', $firstAuthor, PDO::PARAM_STR);
+	$query->bindParam(':coAuthor', $_POST['coAuthor1'], PDO::PARAM_STR);
+	$query->bindParam(':coAuthor2', $_POST['coAuthor2'], PDO::PARAM_STR);
+	$query->bindParam(':coAuthor3', $_POST['coAuthor3'], PDO::PARAM_STR);
+	$query->bindParam(':coAuthor4', $_POST['coAuthor4'], PDO::PARAM_STR);
+	$query->bindParam(':journalType', $journalType, PDO::PARAM_STR);
+	$query->bindParam(':title', $title, PDO::PARAM_STR);
+	$query->bindParam(':journalName', $journalName, PDO::PARAM_STR);
+	$query->bindParam(':datePublished', $datePublished, PDO::PARAM_STR);
+	$query->bindParam(':yearPublished', $yearPublished, PDO::PARAM_STR);
+	$query->bindParam(':issnNo', $issnNo, PDO::PARAM_STR);
+	$query->bindParam(':volume', $volume, PDO::PARAM_STR);
+	$query->bindParam(':page', $page, PDO::PARAM_STR);
+	$query->bindParam(':impact', $impact, PDO::PARAM_STR);
+	$query->bindParam(':citation', $citation, PDO::PARAM_STR);
+	$query->bindParam(':description', $description, PDO::PARAM_STR);
+	$query->bindParam(':status', $status, PDO::PARAM_STR);
+	$query->bindParam(':createdBy', $createdBy, PDO::PARAM_STR);
+	$query->bindParam(':idedit', $idedit, PDO::PARAM_STR);
+	if($query->execute()){
+		$msg="Information Updated Successfully";
+	} else {
+		$error = "Something went wrong please try again";
+	}
 }    
 ?>
 
@@ -149,7 +150,7 @@ if(isset($_POST['submit']))
 			<div class="container-fluid">
 				<div class="row">
 					<div class="col-md-12">
-						<h3 class="page-title">Edit Publications <?php echo htmlentities($result->name); ?></h3>
+						<h3 class="page-title">Edit Publications for <b><?php echo htmlentities($result->title); ?></b></h3>
 						<div class="row">
 							<div class="col-md-12">
 								<div class="panel panel-default">
@@ -162,144 +163,112 @@ if(isset($_POST['submit']))
 											<form method="post" class="form-horizontal" enctype="multipart/form-data" name="imgform">
 										
 											<div class="form-group">
-												<label class="col-sm-2 control-label">Author Name<span style="color:red">*</span></label>
+												<label class="col-md-2 label-control" for="firstAuthor">Author Name<span style="color:red">*</span></label>
 												<div class="col-sm-4">
-													<input type="text" name="firstAuthor" class="form-control" required value="<?php echo htmlentities($result->first_author);?>">
+													<input type="text" value="<?php echo htmlentities($result->first_author); ?>" name="firstAuthor" placeholder="Enter the author name" class="form-control" required>
+												</div>
+												<label class="col-md-2 label-control" for="volume">Volume</label>
+												<div class="col-sm-4">
+													<input type="text" value="<?php echo htmlentities($result->volume); ?>" name="volume" id="volume" class="form-control" placeholder="Enter the volume">
+												</div>
+
+											</div>
+											<div class="form-group">
+												<label class="col-md-2 label-control" for="coAuthor1">Co-Author 1</label>
+												<div class="col-sm-4">
+													<input type="text" value="<?php echo htmlentities($result->co_author); ?>" name="coAuthor1" id="coAuthor1" placeholder="Enter co-author 1 name" class="form-control">
+												</div>
+												<label class="col-md-2 label-control" for="pages">Pages<span style="color:red">*</span></label>
+												<div class="col-sm-4">
+													<input type="text" value="<?php echo htmlentities($result->page); ?>" name="pages" id="pages" placeholder="Enter pages" class="form-control" required>
 												</div>
 												
-												<label class="col-sm-2 control-label">Co Author<span style="color:red">*</span></label>
+											</div>
+
+											<div class="form-group">
+												<label class="col-md-2 label-control" for="coAuthor2">Co-Author 2</label>
 												<div class="col-sm-4">
-													<input type="text" name="coAuthor" class="form-control" required value="<?php echo htmlentities($result->co_author);?>">
+													<input type="text" value="<?php echo htmlentities($result->co_author2); ?>" name="coAuthor2" id="coAuthor2" placeholder="Enter co-author 2 name" class="form-control">
+												</div>
+												<label class="col-md-2 label-control" for="issnNo">ISSN No</label>
+												<div class="col-sm-4">
+													<input type="text" value="<?php echo htmlentities($result->issn); ?>" name="issnNo" id="issnNo" class="form-control">
 												</div>
 											</div>
 
 											<div class="form-group">
-												<label class="col-sm-2 control-label">Nationalty<span style="color:red">*</span></label>
+												<label class="col-md-2 label-control" for="coAuthor3">Co-Author 3</label>
 												<div class="col-sm-4">
-													<input type="text" name="nationalType" class="form-control" required value="<?php echo htmlentities($result->national_type);?>">
+													<input type="text" value="<?php echo htmlentities($result->co_author3); ?>" name="coAuthor3" id="coAuthor3" placeholder="Enter co-author 3 name" class="form-control">
+												</div>
+												<label class="col-md-2 label-control" for="yearPublished">Year of Publication<span style="color:red">*</span></label>
+												<div class="col-sm-4">
+													<input class="date-year form-control" type="text" value="<?php echo htmlentities($result->year_published); ?>" placeholder="click to show year picker" id="yearPublished" name="yearPublished" required>
 												</div>
 												
-												<label class="col-sm-2 control-label">Title<span style="color:red">*</span></label>
-												<div class="col-sm-4">
-													<input type="text" name="title" class="form-control" required value="<?php echo htmlentities($result->title);?>">
-												</div>
-											</div>	
+											</div>
 											<div class="form-group">
-												<label class="col-sm-2 control-label">Journal Name<span style="color:red">*</span></label>
+												<label class="col-md-2 label-control" for="coAuthor4">Co-Author 4</label>
 												<div class="col-sm-4">
-													<input type="text" name="journalName" class="form-control" required value="<?php echo htmlentities($result->journal_name);?>">
+													<input type="text" value="<?php echo htmlentities($result->co_author4); ?>" name="coAuthor4" id="coAuthor4" placeholder="Enter co-author 4 name" class="form-control">
 												</div>
-												
-												<label class="col-sm-2 control-label">Date of Pulication<span style="color:red">*</span></label>
+												<label class="col-md-2 label-control" for="monthPublished">Month of Publication<span style="color:red">*</span></label>
 												<div class="col-sm-4">
-													<input type="date" name="datePublished" class="form-control" required value="<?php echo htmlentities($result->date_published);?>">
+													<input class="date-month form-control" type="text" value="<?php echo htmlentities($result->date_published); ?>" placeholder="click to show month picker" id="monthPublished" name="monthPublished" required>
 												</div>
-											</div>	
-
+											</div>
 											<div class="form-group">
-												<label class="col-sm-2 control-label">Year of Publication<span style="color:red">*</span></label>
+												<label class="col-md-2 label-control" for="journalType">Journal Type</label>
 												<div class="col-sm-4">
-													<input type="text" name="yearPublished" id="yearPublished"  class="date-own form-control" required value="<?php echo htmlentities($result->year_published);?>">
+													<select name="journalType" id="journalType" class="form-control" title="Please select the journal type">
+														<option value="">--Select--</option>
+														<option value="national" <?php echo (isset($result->journal_type) && htmlentities($result->journal_type) == 'national')?"selected='selected'" : "";?>>National</option>
+														<option value="international" <?php echo (isset($result->journal_type) && htmlentities($result->journal_type) == 'international')?"selected='selected'" : "";?>>International</option>
+														<option value="conference" <?php echo (isset($result->journal_type) && htmlentities($result->journal_type) == 'conference')?"selected='selected'" : "";?>>Conference</option>
+													</select>
 												</div>
-												
-												<label class="col-sm-2 control-label">ISSN No. <span style="color:red">*</span></label>
+												<label class="col-md-2 label-control" for="citation">Citation Index</label>
 												<div class="col-sm-4">
-													<input type="text" name="issnNo" class="form-control" required value="<?php echo htmlentities($result->issn);?>">
+													<input type="text" value="<?php echo htmlentities($result->citation); ?>" placeholder="Enter the citation index" name="citation" id="citation" class="form-control" required>
 												</div>
-											</div>	
-
+											</div>
 											<div class="form-group">
-												<label class="col-sm-2 control-label">Volume<span style="color:red">*</span></label>
+												<label class="col-md-2 label-control" for="journalName">Journal Name</label>
 												<div class="col-sm-4">
-													<input type="text" name="volume" class="form-control" required value="<?php echo htmlentities($result->volume);?>">
+													<input type="text" value="<?php echo htmlentities($result->journal_name); ?>" placeholder="Enter the journal name" name="journalName" id="journalName" class="form-control" required>
 												</div>
-												
-												<label class="col-sm-2 control-label">Page<span style="color:red">*</span></label>
+												<label class="col-md-2 label-control" for="status">Status</label>
 												<div class="col-sm-4">
-													<input type="text" name="page" class="form-control" required value="<?php echo htmlentities($result->page);?>">
-												</div>
-											</div>	
-
-											<div class="form-group">
-												<label class="col-sm-2 control-label">Impact Factor<span style="color:red">*</span></label>
-												<div class="col-sm-4">
-													<input type="text" name="impact" class="form-control" required value="<?php echo htmlentities($result->impact);?>">
-												</div>
-												
-												<label class="col-sm-2 control-label">Citation Index<span style="color:red">*</span></label>
-												<div class="col-sm-4">
-													<input type="text" name="citation" class="form-control" required value="<?php echo htmlentities($result->citation);?>">
-												</div>
-											</div>	
-
-											<div class="form-group">
-												<label class="col-sm-2 control-label">Description<span style="color:red">*</span></label>
-												<div class="col-sm-4">
-													<textarea class="form-control" rows="2" name="description"><?php echo htmlentities($result->description); ?></textarea>
-													<!-- <input type="text" name="firstAuthor" class="form-control" required value="<?php echo htmlentities($result->first_author);?>"> -->
-												</div>
-												
-												<label class="col-sm-2 control-label">Status<span style="color:red">*</span></label>
-												<div class="col-sm-4">
-													<select name="status" class="form-control" required>
-													<option value="">Select</option>
-														<option value="active" <?php echo ($result->status == 'active' ? " selected='selected'" : ""); ?>>Active</option>
-													<option value="inactive" <?php echo ($result->status == 'inactive' ? " selected='selected'" : ""); ?>>Inactive</option>
-													<!-- <option value="active">Active</option>
-													<option value="inactive">In Active</option> -->
+													<select name="status" id="status" class="form-control" title="Please select the status">
+														<option value="">--Select--</option>
+														<option value="active" <?php echo (isset($result->status) && htmlentities($result->status) == 'active')?"selected='selected'" : "";?>>Active</option>
+														<option value="inactive" <?php echo (isset($result->status) && htmlentities($result->status) == 'inactive')?"selected='selected'" : "";?>>Inactive</option>
 													</select>
 												</div>
 											</div>
 
 											<div class="form-group">
-												<!-- <label class="col-sm-2 control-label">Attachement<span style="color:red">*</span></label> -->
-
-												<div class="col-sm-8 col-sm-offset-2">
-													<!-- <img src="../attachment-document/<?php echo htmlentities($result->attachment);?>" width="150px"/> -->
-													<input type="hidden" name="attachment" value="<?php echo htmlentities($result->attachment);?>" >
-													<input type="hidden" name="idedit" value="<?php echo htmlentities($result->author_id);?>" >
+												<label class="col-md-2 label-control" for="title">Research topic <span style="color:red">*</span></label>
+												<div class="col-sm-4">
+													<input type="text" value="<?php echo htmlentities($result->title); ?>" placeholder="Enter the title of the book" name="title" id="title" class="form-control" required>
 												</div>
-											<!-- </div> -->
-									</div>  
-
-											<!-- </div>	 -->
-											
-
-											<!-- <div class="form-group">
-											<label class="col-sm-2 control-label">Gender<span style="color:red">*</span></label>
-											<div class="col-sm-4">
-											<select name="gender" class="form-control" required>
-													<option value="">Select</option>
-													<option value="Male">Male</option>
-													<option value="Female">Female</option>
-													</select>
-											</div>
-											<label class="col-sm-2 control-label">Designation<span style="color:red">*</span></label>
-											<div class="col-sm-4">
-											<input type="text" name="designation" class="form-control" required value="< ?php echo htmlentities($result->designation);?>">
-											</div>
-											</div>
-
-
-											<div class="form-group">
-											<label class="col-sm-2 control-label">Image<span style="color:red">*</span></label>
-											<div class="col-sm-4">
-											<input type="file" name="image" class="form-control">
-											</div>
-
-											<label class="col-sm-2 control-label">Mobile No.<span style="color:red">*</span></label>
-											<div class="col-sm-4">
-											<input type="number" name="mobileno" class="form-control" required value="<?php echo htmlentities($result->mobile);?>">
-											</div>
+												<label class="col-md-2 label-control" for="description">Description</label>
+												<div class="col-sm-4">
+													<textarea class="form-control" placeholder="Enter the description" id="description" name="description"><?php echo htmlentities($result->description); ?></textarea>
+												</div>
 											</div>
 
 											<div class="form-group">
-												<div class="col-sm-8 col-sm-offset-2">
-													<img src="../images/<?php echo htmlentities($result->image);?>" width="150px"/>
-													<input type="hidden" name="image" value="<?php echo htmlentities($result->image);?>" >
-													<input type="text" name="idedit" value="<?php echo htmlentities($result->author_id);?>" >
+												<label class="col-md-2 label-control" for="impact">Impact Factor</label>
+												<div class="col-sm-4">
+													<input type="text" value="<?php echo htmlentities($result->impact); ?>" placeholder="Enter the Impact factor" name="impact" id="impact" class="form-control">
+												</div>
+												<label class="col-md-2 label-control" for="attachment">Attachment</label>
+												<div class="col-sm-4">
+													<input type="file" name="attachment" id="attachment" class="form-control" title="Please upload the document">
+												</div>
 											</div>
-											</div> -->
+											<hr>
 
 
 											<div class="form-group">

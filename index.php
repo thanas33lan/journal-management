@@ -1,5 +1,4 @@
 <?php
-session_start();
 include('includes/config.php');
 if (isset($_POST['login'])) {
 	$status = '1';
@@ -43,7 +42,11 @@ if (isset($_POST['login'])) {
 	<link rel="stylesheet" href="css/fileinput.min.css">
 	<link rel="stylesheet" href="css/awesome-bootstrap-checkbox.css">
 	<link rel="stylesheet" href="css/style.css">
-
+	<style>
+        a {
+            color: #f8f8f8;
+        }
+    </style>
 </head>
 
 <body>

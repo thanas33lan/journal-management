@@ -1,11 +1,9 @@
 <?php
-session_start();
 error_reporting(0);
 include('includes/config.php');
 if (strlen($_SESSION['alogin']) == 0) {
 	header('location:index.php');
 } else {
-
 	if (isset($_POST['submit'])) {
 		$file 			= $_FILES['attachment']['name'];
 		$file_loc 		= $_FILES['attachment']['tmp_name'];
@@ -15,10 +13,10 @@ if (strlen($_SESSION['alogin']) == 0) {
 
 		$firstAuthor	= $_POST['firstAuthor'];
 		$coAuthor		= $_POST['coAuthor'];
-		$nationalType	= $_POST['nationalType'];
+		$journalType	= $_POST['journalType'];
 		$title			= $_POST['title'];
 		$journalName    = $_POST['journalName'];
-		$datePublished	= $_POST['datePublished'];
+		$datePublished	= $_POST['monthPublished'];
 		$yearPublished	= $_POST['yearPublished'];
 		$issnNo			= $_POST['issnNo'];
 		$volume			= $_POST['volume'];
@@ -47,16 +45,16 @@ if (strlen($_SESSION['alogin']) == 0) {
 
 		$sql = "insert into author_details 
 
-	(first_author, co_author, national_type, title, journal_name,  date_published, year_published, issn, volume, page, impact, citation, description, status, created_by, attachment ) values 
-	(:firstAuthor, :coAuthor, :nationalType, :title, :journalName, :datePublished, :yearPublished, :issnNo, :volume, :page, :impact, :citation, :description, :status, :createdBy,:attachment)";
+	(first_author, co_author, co_author2, co_author3, co_author4, journal_type, title, journal_name,  date_published, year_published, issn, volume, page, impact, citation, description, status, created_by, attachment ) values 
+	(:firstAuthor, :coAuthor, :coAuthor2, :coAuthor3, :coAuthor4, :journalType, :title, :journalName, :datePublished, :yearPublished, :issnNo, :volume, :page, :impact, :citation, :description, :status, :createdBy,:attachment)";
 
 		$query = $dbh->prepare($sql);
-		// $query-> bindParam(':user', $user, PDO::PARAM_STR);
-		// $query-> bindParam(':reciver', $reciver, PDO::PARAM_STR);
-
 		$query->bindParam(':firstAuthor', $firstAuthor, PDO::PARAM_STR);
-		$query->bindParam(':coAuthor', $coAuthor, PDO::PARAM_STR);
-		$query->bindParam(':nationalType', $nationalType, PDO::PARAM_STR);
+		$query->bindParam(':coAuthor', $_POST['coAuthor1'], PDO::PARAM_STR);
+		$query->bindParam(':coAuthor2', $_POST['coAuthor2'], PDO::PARAM_STR);
+		$query->bindParam(':coAuthor3', $_POST['coAuthor3'], PDO::PARAM_STR);
+		$query->bindParam(':coAuthor4', $_POST['coAuthor4'], PDO::PARAM_STR);
+		$query->bindParam(':journalType', $journalType, PDO::PARAM_STR);
 		$query->bindParam(':title', $title, PDO::PARAM_STR);
 		$query->bindParam(':journalName', $journalName, PDO::PARAM_STR);
 		$query->bindParam(':datePublished', $datePublished, PDO::PARAM_STR);
@@ -68,7 +66,7 @@ if (strlen($_SESSION['alogin']) == 0) {
 		$query->bindParam(':citation', $citation, PDO::PARAM_STR);
 		$query->bindParam(':description', $description, PDO::PARAM_STR);
 		$query->bindParam(':status', $status, PDO::PARAM_STR);
-		$query-> bindParam(':createdBy', $createdBy, PDO::PARAM_STR);
+		$query->bindParam(':createdBy', $createdBy, PDO::PARAM_STR);
 		$query->bindParam(':attachment', $attachment, PDO::PARAM_STR);
 		$query->execute();
 		$msg = "Feedback Send";
@@ -159,98 +157,86 @@ if (strlen($_SESSION['alogin']) == 0) {
 
 										<div class="panel-body">
 											<form method="post" class="form-horizontal" enctype="multipart/form-data">
-												<!-- <div class="form-group"> -->
 												<input type="hidden" name="user" value="<?php echo htmlentities($result->email); ?>">
-												<!-- <div class="row">		 -->
-
-												<!-- <div class="form-group">
-												<label class="col-sm-2 control-label">Author Name<span style="color:red">*</span></label>
-												<div class="col-sm-4">
-													<input type="text" name="firstAuthor" class="form-control" required value="<?php echo htmlentities($result->first_author); ?>">
-												</div>
-												
-												<label class="col-sm-2 control-label">Co Author<span style="color:red">*</span></label>
-												<div class="col-sm-4">
-													<input type="text" name="coAuthor" class="form-control" required value="<?php echo htmlentities($result->co_author); ?>">
-												</div>
-											</div> -->
-
-
 												<div class="form-group">
-													<label class="col-md-2 label-control" for="hours">Author Name<span style="color:red">*</span></label>
+													<label class="col-md-2 label-control" for="firstAuthor">Author Name<span style="color:red">*</span></label>
 													<div class="col-sm-4">
-														<input type="text" name="firstAuthor" class="form-control" required>
+														<input type="text" name="firstAuthor" placeholder="Enter the author name" class="form-control" required>
+													</div>
+													<label class="col-md-2 label-control" for="volume">Volume</label>
+													<div class="col-sm-4">
+														<input type="text" name="volume" id="volume" class="form-control" placeholder="Enter the volume">
 													</div>
 
-													<label class="col-md-2 label-control">Co-Author<span style="color:red">*</span></label>
-													<div class="col-sm-4">
-														<input type="text" name="coAuthor" class="form-control" required>
-													</div>
 												</div>
 												<div class="form-group">
-													<label class="col-md-2 label-control">Nationalty<span style="color:red">*</span></label>
+													<label class="col-md-2 label-control" for="coAuthor1">Co-Author 1</label>
 													<div class="col-sm-4">
-														<input type="text" name="nationalType" class="form-control" required>
+														<input type="text" name="coAuthor1" id="coAuthor1" placeholder="Enter co-author 1 name" class="form-control">
 													</div>
-													<label class="col-md-2 label-control">Title <span style="color:red">*</span></label>
+													<label class="col-md-2 label-control" for="pages">Pages<span style="color:red">*</span></label>
 													<div class="col-sm-4">
-														<input type="text" name="title" class="form-control" required>
+														<input type="text" name="pages" id="pages" placeholder="Enter pages" class="form-control" required>
+													</div>
+													
+												</div>
+
+												<div class="form-group">
+													<label class="col-md-2 label-control" for="coAuthor2">Co-Author 2</label>
+													<div class="col-sm-4">
+														<input type="text" name="coAuthor2" id="coAuthor2" placeholder="Enter co-author 2 name" class="form-control">
+													</div>
+													<label class="col-md-2 label-control" for="issnNo">ISSN No</label>
+													<div class="col-sm-4">
+														<input type="text" name="issnNo" id="issnNo" class="form-control">
 													</div>
 												</div>
 
 												<div class="form-group">
-													<label class="col-md-2 label-control">Journal Name<span style="color:red">*</span></label>
+													<label class="col-md-2 label-control" for="coAuthor3">Co-Author 3</label>
 													<div class="col-sm-4">
-														<input type="text" name="journalName" class="form-control" required>
+														<input type="text" name="coAuthor3" id="coAuthor3" placeholder="Enter co-author 3 name" class="form-control">
 													</div>
-													<label class="col-md-2 label-control">Date of Pulication<span style="color:red">*</span></label>
+													<label class="col-md-2 label-control" for="yearPublished">Year of Publication<span style="color:red">*</span></label>
 													<div class="col-sm-4">
-														<input type="date" name="datePublished" class="form-control" required>
+														<input class="date-year form-control" type="text" placeholder="click to show year picker" id="yearPublished" name="yearPublished" required>
 													</div>
-												</div>
-
-												<div class="form-group">
-													<label class="col-md-2 label-control">Year of Publication<span style="color:red">*</span></label>
-													<div class="col-sm-4">
-														<input class="date-own form-control" type="text" placeholder="click to show datepicker" id="yearPublished" name="yearPublished" required>
-														<!-- <input type="text" name="yearPublished" class="form-control" required> -->
-													</div>
-													<label class="col-md-2 label-control">ISSN No. <span style="color:red">*</span></label>
-													<div class="col-sm-4">
-														<input type="text" name="issnNo" class="form-control" required>
-													</div>
+													
 												</div>
 												<div class="form-group">
-													<label class="col-md-2 label-control">Volume <span style="color:red">*</span></label>
+													<label class="col-md-2 label-control" for="coAuthor4">Co-Author 4</label>
 													<div class="col-sm-4">
-														<input type="text" name="volume" class="form-control" required>
+														<input type="text" name="coAuthor4" id="coAuthor4" placeholder="Enter co-author 4 name" class="form-control">
 													</div>
-													<label class="col-md-2 label-control">Page <span style="color:red">*</span></label>
+													<label class="col-md-2 label-control" for="monthPublished">Month of Publication<span style="color:red">*</span></label>
 													<div class="col-sm-4">
-														<input type="text" name="page" class="form-control" required>
+														<input class="date-month form-control" type="text" placeholder="click to show month picker" id="monthPublished" name="monthPublished" required>
 													</div>
 												</div>
 												<div class="form-group">
-													<label class="col-md-2 label-control">Impact Factor<span style="color:red">*</span></label>
+													<label class="col-md-2 label-control" for="journalType">Journal Type</label>
 													<div class="col-sm-4">
-														<input type="text" name="impact" class="form-control" required>
+														<select name="journalType" id="journalType" class="form-control" title="Please select the journal type">
+															<option value="">--Select--</option>
+															<option value="national">National</option>
+															<option value="international">International</option>
+															<option value="conference">Conference</option>
+														</select>
 													</div>
-													<label class="col-md-2 label-control">Citation Index<span style="color:red">*</span></label>
+													<label class="col-md-2 label-control" for="citation">Citation Index</label>
 													<div class="col-sm-4">
-														<input type="text" name="citation" class="form-control" required>
+														<input type="text" placeholder="Enter the citation index" name="citation" id="citation" class="form-control" required>
 													</div>
 												</div>
-
 												<div class="form-group">
-													<label class="col-md-2 label-control">Description<span style="color:red">*</span></label>
+													<label class="col-md-2 label-control" for="journalName">Journal Name</label>
 													<div class="col-sm-4">
-														<textarea class="form-control" rows="2" name="description"></textarea>
+														<input type="text" placeholder="Enter the journal name" name="journalName" id="journalName" class="form-control" required>
 													</div>
-
-													<label class="col-md-2 label-control">Status <span style="color:red">*</span></label>
+													<label class="col-md-2 label-control" for="status">Status</label>
 													<div class="col-sm-4">
-														<select name="status" class="form-control" required>
-															<option value="">Select</option>
+														<select name="status" id="status" class="form-control" title="Please select the status">
+															<option value="">--Select--</option>
 															<option value="active">Active</option>
 															<option value="inactive">Inactive</option>
 														</select>
@@ -258,9 +244,24 @@ if (strlen($_SESSION['alogin']) == 0) {
 												</div>
 
 												<div class="form-group">
-													<label class="col-md-2 control-label">Attachment<span style="color:red"></span></label>
+													<label class="col-md-2 label-control" for="title">Research topic <span style="color:red">*</span></label>
 													<div class="col-sm-4">
-														<input type="file" name="attachment" class="form-control">
+														<input type="text" placeholder="Enter the title of the book" name="title" id="title" class="form-control" required>
+													</div>
+													<label class="col-md-2 label-control" for="description">Description</label>
+													<div class="col-sm-4">
+														<textarea class="form-control" placeholder="Enter the description" id="description" name="description"></textarea>
+													</div>
+												</div>
+
+												<div class="form-group">
+													<label class="col-md-2 label-control" for="impact">Impact Factor</label>
+													<div class="col-sm-4">
+														<input type="text" placeholder="Enter the Impact factor" name="impact" id="impact" class="form-control">
+													</div>
+													<label class="col-md-2 label-control" for="attachment">Attachment</label>
+													<div class="col-sm-4">
+														<input type="file" name="attachment" id="attachment" class="form-control" title="Please upload the document">
 													</div>
 												</div>
 												<hr>
@@ -296,9 +297,21 @@ if (strlen($_SESSION['alogin']) == 0) {
 		<script type="text/javascript">
 			$(document).ready(function() {
 
-				$('.date-own').datepicker({
+				$('.date-year').datepicker({
 					minViewMode: 2,
+					maxDate: $.now(),
 					format: 'yyyy'
+				});
+				
+				$('.date-month').datepicker({
+					changeMonth: true,
+					changeYear: true,
+					showButtonPanel: true,
+					maxDate: $.now(),
+					format: 'MM yyyy',
+					onClose: function(dateText, inst) { 
+						$(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, 1));
+					}
 				});
 
 				setTimeout(function() {

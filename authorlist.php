@@ -1,5 +1,4 @@
 <?php
-session_start();
 error_reporting(0);
 include('includes/config.php');
 if (strlen($_SESSION['alogin']) == 0) {
@@ -121,7 +120,7 @@ if (strlen($_SESSION['alogin']) == 0) {
 											<tr>
 												<th>#</th>
 												<th>Author Name</th>
-												<th>Title</th>
+												<th>Research topic</th>
 												<th>Status</th>
 												<th>Action</th>
 											</tr>
